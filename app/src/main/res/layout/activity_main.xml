@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:text="Selamat datang, Rio.Silahkan lengkapi form di bawah ini :"
+                    android:text="Selamat datang. Silahkan lengkapi form di bawah ini :"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
@@ -72,7 +72,6 @@
                             android:maxLines="1"
                             android:background="@null"
                             android:textSize="18sp"
-                            android:inputType="textPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
@@ -96,12 +95,11 @@
                             android:layout_height="wrap_content" />
 
                         <EditText
-                            android:id="@+id/et_nrp"
+                            android:id="@+id/et_nosim"
                             android:singleLine="true"
                             android:maxLines="1"
                             android:background="@null"
                             android:textSize="18sp"
-                            android:inputType="textPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
@@ -181,7 +179,6 @@
                             android:id="@+id/et_pengalaman"
                             android:background="@null"
                             android:textSize="18sp"
-                            android:inputType="textPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
@@ -211,7 +208,6 @@
                             android:maxLines="1"
                             android:background="@null"
                             android:textSize="18sp"
-                            android:inputType="textPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
