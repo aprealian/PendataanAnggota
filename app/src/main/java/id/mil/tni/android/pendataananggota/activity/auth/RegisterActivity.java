@@ -1,5 +1,7 @@
 package id.mil.tni.android.pendataananggota.activity.auth;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,27 +11,38 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
+import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.helper.UserDetailStorage;
+import id.mil.tni.android.pendataananggota.http.PARegisterProfile;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private SessionManager session;
+    private ProgressDialog dialog;
     private LinearLayout btnDaftar;
     private EditText etNama;
     private EditText etNrp;
     private EditText etPassword;
     private EditText etVerifPassword;
     private EditText etEmail;
-    private String name, email, password;
+    private String name, nrp, email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        dialog.setMessage("Please wait...");
+
 
         // Session Manager
         session = new SessionManager(RegisterActivity.this);
@@ -66,14 +79,65 @@ public class RegisterActivity extends AppCompatActivity {
                     userr.setPassword();
                     userr.setEmail(email);*/
 
-                    Toast.makeText(RegisterActivity.this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
+                   /* Toast.makeText(RegisterActivity.this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, AuthActivity.class);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+
+                   name = etNama.getText().toString();
+                   email = etEmail.getText().toString();
+                   nrp = etNrp.getText().toString();
+                   password = etPassword.getText().toString();
+
+                    new onRegsiterRequest(getApplicationContext(), getString(R.string.api_path_register), name, nrp, email, password).execute();
                 }
 
             }
         });
 
     }
+
+
+    private class onRegsiterRequest extends PARegisterProfile {
+
+        public onRegsiterRequest(Context context, String apiPath, String name, String nrp, String email, String password) {
+            super(context, apiPath, name, nrp, email, password);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        public JSONObject responseObject() throws JSONException {
+            return super.responseObject();
+        }
+
+        @Override
+        public JSONObject responseSuccess() throws JSONException {
+            Toast.makeText(RegisterActivity.this, "reguster success", Toast.LENGTH_SHORT).show();
+            return super.responseSuccess();
+        }
+
+        @Override
+        public JSONObject responseFailed() throws JSONException {
+            Toast.makeText(RegisterActivity.this, "register failed", Toast.LENGTH_SHORT).show();
+            return super.responseFailed();
+        }
+
+        @Override
+        public String responseError() {
+            if (dialog != null) dialog.dismiss();
+            return super.responseError();
+        }
+    }
+
+
 }
