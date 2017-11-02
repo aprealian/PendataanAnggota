@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import id.mil.tni.android.pendataananggota.data.User;
+
 public class LoginStorage extends AbstractStorage {
     private static final String FILENAME = "pendataan:storage:login-user";
     private static final String KEY_USER = "user";

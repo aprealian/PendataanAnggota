@@ -1,4 +1,4 @@
-package id.mil.tni.android.pendataananggota.helper;
+package id.mil.tni.android.pendataananggota.data;
 
 import android.text.TextUtils;
 

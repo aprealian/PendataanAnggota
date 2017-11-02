@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="basic_url">http://apistg.rekor.id</string>
+    <string name="api_path_login">/api/login</string>
+    <string name="api_path_register">/api/daftar</string>
+    <string name="api_path_get_profile"></string>
+    <string name="api_path_update_profile"></string>
+</resources>

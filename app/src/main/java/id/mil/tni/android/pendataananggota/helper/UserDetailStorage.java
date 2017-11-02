@@ -5,6 +5,8 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import id.mil.tni.android.pendataananggota.data.User;
+
 
 /**
  * Created by dantech on 3/12/17.

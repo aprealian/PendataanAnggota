@@ -11,10 +11,8 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
-import id.mil.tni.android.pendataananggota.helper.User;
 import id.mil.tni.android.pendataananggota.helper.UserDetailStorage;
 
 public class RegisterActivity extends AppCompatActivity {
