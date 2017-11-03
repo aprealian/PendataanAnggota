@@ -1,14 +1,17 @@
 package id.mil.tni.android.pendataananggota;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog dialog;
     private LinearLayout btnSimpan;
     private TextView tvNama;
+    private ImageView ivSignOut;
     private EditText etEmail;
     private EditText etNomobil;
     private EditText etNosim;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setMessage("Please wait...");
 
+        ivSignOut = (ImageView) findViewById(R.id.iv_signout);
         btnSimpan = (LinearLayout) findViewById(R.id.lv_simpan);
         tvNama = (TextView) findViewById(R.id.tv_nama);
         etEmail = (EditText) findViewById(R.id.et_email);
@@ -113,6 +118,36 @@ public class MainActivity extends AppCompatActivity {
                     keterampilan = etKeterampilan.getText().toString();
                     new onUpdateRequest(getApplicationContext(), getString(R.string.api_path_update_profile), noMobil, noSim, pengalaman, keterampilan).execute();
                 }
+            }
+        });
+
+        ivSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Light_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
+                builder.setTitle("Log out")
+                        .setMessage("Apakah Anda ingin keluar ?")
+                        .setCancelable(false)
+                        .setPositiveButton("YA", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                                session.logoutUser();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("TIDAK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
+
             }
         });
 

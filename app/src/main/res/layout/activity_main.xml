@@ -38,8 +38,17 @@
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+
+                <ImageView
+                    android:id="@+id/iv_signout"
+                    android:src="@drawable/ic_sign_out"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

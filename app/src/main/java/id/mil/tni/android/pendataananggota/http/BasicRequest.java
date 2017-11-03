@@ -70,7 +70,7 @@ public class BasicRequest  extends AsyncTask<Void, Void, Void> {
 
             Request request = new Request.Builder()
                     .url(context.getString(R.string.basic_url)+apiPath)
-                    .addHeader("token", token)
+                    .addHeader("access_token", token)
                     .post(body)
                     .build();
 

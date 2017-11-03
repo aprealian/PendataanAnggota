@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 session.createLoginSessionToken(idUser, name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true, token);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             } catch (JSONException e){
