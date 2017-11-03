@@ -21,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TestActivity" />
         <activity android:name=".activity.auth.LoginActivity" />
         <activity android:name=".activity.auth.RegisterActivity" />
         <activity android:name=".MainActivity" />

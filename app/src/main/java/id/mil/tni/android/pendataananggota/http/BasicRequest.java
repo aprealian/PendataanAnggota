@@ -33,6 +33,7 @@ public class BasicRequest  extends AsyncTask<Void, Void, Void> {
     private String apiPath;
     private String json;
     private String type;
+    private String token = "";
     private String msg;
     RequestBody body;
 
@@ -69,6 +70,7 @@ public class BasicRequest  extends AsyncTask<Void, Void, Void> {
 
             Request request = new Request.Builder()
                     .url(context.getString(R.string.basic_url)+apiPath)
+                    .addHeader("token", token)
                     .post(body)
                     .build();
 
@@ -122,6 +124,10 @@ public class BasicRequest  extends AsyncTask<Void, Void, Void> {
 
     public void addQuery(RequestBody formBody) {
         this.formBody = formBody;
+    }
+
+    public void addToken(String token) {
+        this.token = token;
     }
 
     public void addRawJSON(String json) {

@@ -36,12 +36,24 @@ import id.mil.tni.android.pendataananggota.http.PALoginRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static String TAG_ID_USER = "idUser";
+    private static String TAG_NRP = "nrp";
+    private static String TAG_EMAIL = "email";
+    private static String TAG_NAME = "name";
+    private static String TAG_CAR_NUM = "car_num";
+    private static String TAG_SIM_NUM = "sim_num";
+    private static String TAG_ORG_EXP = "org_exp";
+    private static String TAG_SKILLS = "skills";
+    private static String TAG_TOKEN = "token";
+
     private SessionManager session;
     private ProgressDialog dialog;
     private LinearLayout btnLogin;
     private EditText etUsername;
     private EditText etPassword;
 
+    private String token;
+    private String idUser;
     private String name;
     private String email;
     private String noMobil;
@@ -108,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
     private class onLoginRequest extends PALoginRequest {
 
         public onLoginRequest(Context context, String apiPath, String email, String password) {
@@ -135,11 +146,30 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public JSONObject responseSuccess() throws JSONException {
             if (dialog != null) dialog.dismiss();
-            session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
-            session.setLoginSession(true);
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+
+            try{
+                JSONObject jsonObject = new JSONObject(getJson());
+                JSONObject userObj = jsonObject.getJSONObject("data");
+                idUser = userObj.getString(TAG_ID_USER);
+                nrp = userObj.getString(TAG_NRP);
+                email = userObj.getString(TAG_EMAIL);
+                name = userObj.getString(TAG_NAME);
+                noMobil = userObj.getString(TAG_CAR_NUM);
+                noSim = userObj.getString(TAG_SIM_NUM);
+                pengalaman = userObj.getString(TAG_ORG_EXP);
+                keterampilan = userObj.getString(TAG_SKILLS);
+                token = userObj.getString(TAG_TOKEN);
+
+                session.createLoginSessionToken(idUser, name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true, token);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            } catch (JSONException e){
+                e.printStackTrace();
+                Toast.makeText(LoginActivity.this, "Terjadi kesalahan pada sistem", Toast.LENGTH_SHORT).show();
+            }
+
             return super.responseSuccess();
         }
 

@@ -40,6 +40,7 @@ public class SessionManager {
     public static final String IS_LOGIN = "IsLoggedIn";
 
     // User name (make variable public to access from outside)
+    public static final String KEY_ID_USER = "idUser";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
@@ -48,6 +49,7 @@ public class SessionManager {
     public static final String KEY_NO_SIM = "no_sim";
     public static final String KEY_PENGALAMAN = "pengalaman";
     public static final String KEY_KETERAMPILAN = "keterampilan";
+    public static final String KEY_TOKEN = "token";
 
 
 
@@ -62,7 +64,7 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String email, String password, String nrp, String no_mobil, String no_sim, String pengalaman, String keterampilan, boolean isLogin){
+    public void createLoginSession(String name, String email, String password, String nrp, String no_mobil, String no_sim, String pengalaman, String keterampilan){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, false);
         // Storing name in pref
@@ -74,11 +76,41 @@ public class SessionManager {
         editor.putString(KEY_NO_SIM, no_sim);
         editor.putString(KEY_PENGALAMAN, pengalaman);
         editor.putString(KEY_KETERAMPILAN, keterampilan);
-        editor.putString(KEY_KETERAMPILAN, keterampilan);
-        editor.putBoolean(IS_LOGIN, isLogin);
         // commit changes
         editor.commit();
     }
+
+    public void createLoginSessionToken(String idUser, String name, String email, String password, String nrp, String no_mobil, String no_sim, String pengalaman, String keterampilan, boolean isLogin, String token){
+        // Storing login value as TRUE
+        // Storing name in pref
+        editor.putString(KEY_ID_USER, idUser);
+        editor.putString(KEY_NAME, name);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PASSWORD, password);
+        editor.putString(KEY_NRP, nrp);
+        editor.putString(KEY_NO_MOBIL, no_mobil);
+        editor.putString(KEY_NO_SIM, no_sim);
+        editor.putString(KEY_PENGALAMAN, pengalaman);
+        editor.putString(KEY_KETERAMPILAN, keterampilan);
+        editor.putString(KEY_KETERAMPILAN, keterampilan);
+        editor.putBoolean(IS_LOGIN, isLogin);
+        editor.putString(KEY_TOKEN, token);
+        // commit changes
+        editor.commit();
+    }
+
+
+    public void updateProfile(String no_mobil, String no_sim, String pengalaman, String keterampilan){
+        // Storing login value as TRUE
+        editor.putString(KEY_NO_MOBIL, no_mobil);
+        editor.putString(KEY_NO_SIM, no_sim);
+        editor.putString(KEY_PENGALAMAN, pengalaman);
+        editor.putString(KEY_KETERAMPILAN, keterampilan);
+        editor.putString(KEY_KETERAMPILAN, keterampilan);
+        // commit changes
+        editor.commit();
+    }
+
 
     public void setLoginSession(boolean isLogin){
         // Storing login value as TRUE
@@ -155,5 +187,8 @@ public class SessionManager {
     // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
+    }
+    public String getToken(){
+        return pref.getString(KEY_TOKEN, null);
     }
 }

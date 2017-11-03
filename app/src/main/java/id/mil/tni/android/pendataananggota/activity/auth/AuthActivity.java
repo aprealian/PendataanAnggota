@@ -23,19 +23,27 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        initSession();
+        initView();
+        initControl();
+    }
 
+    private void initSession() {
         session = new SessionManager(AuthActivity.this);
-        //Toast.makeText(this, String.valueOf(session.isLoggedIn()), Toast.LENGTH_SHORT).show();
-
-        /*if (session.isLoggedIn()){
-            Intent intent = new Intent( AuthActivity.this, RegisterActivity.class);
+        if (session.isLoggedIn()){
+            Intent intent = new Intent( AuthActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-        }*/
+        }
+    }
 
+    private void initView() {
         btnLogin = (LinearLayout) findViewById(R.id.lv_login);
         btnDaftar = (LinearLayout) findViewById(R.id.lv_daftar);
+    }
 
+    private void initControl() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +60,6 @@ public class AuthActivity extends AppCompatActivity {
                 //finish();
             }
         });
-
     }
+
 }

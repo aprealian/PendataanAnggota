@@ -12,11 +12,11 @@ import okhttp3.RequestBody;
  * Created by Aprilian Nur on 11/2/2017.
  */
 
-public class PARegisterProfile extends BasicRequest {
+public class PARegisterRequest extends BasicRequest {
 
     private Context context;
 
-    public PARegisterProfile(Context context, String apiPath, String name, String nrp, String email, String password, String retypePassword) {
+    public PARegisterRequest(Context context, String apiPath, String name, String nrp, String email, String password, String retypePassword) {
         super(context, apiPath);
 
         this.context = context;

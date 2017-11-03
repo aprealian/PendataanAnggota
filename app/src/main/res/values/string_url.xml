@@ -4,5 +4,5 @@
     <string name="api_path_login">/api/login</string>
     <string name="api_path_register">/api/daftar</string>
     <string name="api_path_get_profile"></string>
-    <string name="api_path_update_profile"></string>
+    <string name="api_path_update_profile">/api/update_info</string>
 </resources>

@@ -17,12 +17,11 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
 import id.mil.tni.android.pendataananggota.helper.Helper;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.helper.UserDetailStorage;
-import id.mil.tni.android.pendataananggota.http.PARegisterProfile;
+import id.mil.tni.android.pendataananggota.http.PARegisterRequest;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -75,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!etPassword.getText().toString().equals(etVerifPassword.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "Verifikasi password salah", Toast.LENGTH_SHORT).show();
                 } else {
-                    session.createLoginSession(etNama.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), etNrp.getText().toString(), null, null, null,null, false);
+                    //session.createLoginSession(etNama.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), etNrp.getText().toString(), null, null, null,null, false);
 
                     /*User userr = new User();
                     userr.setName();
@@ -87,12 +86,12 @@ public class RegisterActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterActivity.this, AuthActivity.class);
                     startActivity(intent);
                     finish();*/
+                    dialog.show();
                     name = etNama.getText().toString();
                     email = etEmail.getText().toString();
                     nrp = etNrp.getText().toString();
                     password = etPassword.getText().toString();
                     retypePassword = etVerifPassword.getText().toString();
-
                     new onRegsiterRequest(getApplicationContext(), getString(R.string.api_path_register), name, nrp, email+"@mabes.tni.mil", password, retypePassword).execute();
                 }
 
@@ -102,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private class onRegsiterRequest extends PARegisterProfile {
+    private class onRegsiterRequest extends PARegisterRequest {
 
         public onRegsiterRequest(Context context, String apiPath, String name, String nrp, String email, String password, String retypePassword) {
             super(context, apiPath, name, nrp, email, password, retypePassword);
@@ -163,6 +162,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 
 
 }
