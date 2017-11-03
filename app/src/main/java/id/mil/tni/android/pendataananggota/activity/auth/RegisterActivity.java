@@ -2,6 +2,7 @@ package id.mil.tni.android.pendataananggota.activity.auth;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 
 import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
+import id.mil.tni.android.pendataananggota.helper.Helper;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.helper.UserDetailStorage;
 import id.mil.tni.android.pendataananggota.http.PARegisterProfile;
@@ -32,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etVerifPassword;
     private EditText etEmail;
-    private String name, nrp, email, password;
+    private String name, nrp, email, password, retypePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(etNrp.getText().toString()) || TextUtils.isEmpty(etNama.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString()) || TextUtils.isEmpty(etVerifPassword.getText().toString()) || TextUtils.isEmpty(etEmail.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "Silahkan isi form yang masih kosong", Toast.LENGTH_SHORT).show();
+                } else if (etPassword.getText().length() < 6 ){
+                    Toast.makeText(RegisterActivity.this, "Panjang password minimal 6 karakter", Toast.LENGTH_SHORT).show();
                 } else if (!etPassword.getText().toString().equals(etVerifPassword.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "Verifikasi password salah", Toast.LENGTH_SHORT).show();
                 } else {
@@ -83,13 +87,13 @@ public class RegisterActivity extends AppCompatActivity {
                     Intent intent = new Intent(RegisterActivity.this, AuthActivity.class);
                     startActivity(intent);
                     finish();*/
+                    name = etNama.getText().toString();
+                    email = etEmail.getText().toString();
+                    nrp = etNrp.getText().toString();
+                    password = etPassword.getText().toString();
+                    retypePassword = etVerifPassword.getText().toString();
 
-                   name = etNama.getText().toString();
-                   email = etEmail.getText().toString();
-                   nrp = etNrp.getText().toString();
-                   password = etPassword.getText().toString();
-
-                    new onRegsiterRequest(getApplicationContext(), getString(R.string.api_path_register), name, nrp, email, password).execute();
+                    new onRegsiterRequest(getApplicationContext(), getString(R.string.api_path_register), name, nrp, email+"@mabes.tni.mil", password, retypePassword).execute();
                 }
 
             }
@@ -100,8 +104,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private class onRegsiterRequest extends PARegisterProfile {
 
-        public onRegsiterRequest(Context context, String apiPath, String name, String nrp, String email, String password) {
-            super(context, apiPath, name, nrp, email, password);
+        public onRegsiterRequest(Context context, String apiPath, String name, String nrp, String email, String password, String retypePassword) {
+            super(context, apiPath, name, nrp, email, password, retypePassword);
         }
 
         @Override
@@ -122,21 +126,42 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public JSONObject responseSuccess() throws JSONException {
-            Toast.makeText(RegisterActivity.this, "reguster success", Toast.LENGTH_SHORT).show();
+            if (dialog != null) dialog.dismiss();
+            //session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
+            Helper.handlePopupMessage(RegisterActivity.this, getMsg(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(RegisterActivity.this, AuthActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }, false);
             return super.responseSuccess();
         }
 
         @Override
         public JSONObject responseFailed() throws JSONException {
-            Toast.makeText(RegisterActivity.this, "register failed", Toast.LENGTH_SHORT).show();
+            if (dialog != null) dialog.dismiss();
+            Helper.handlePopupMessage(RegisterActivity.this, getMsg(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }, true);
             return super.responseFailed();
         }
 
         @Override
         public String responseError() {
             if (dialog != null) dialog.dismiss();
+            Helper.handlePopupMessage(RegisterActivity.this, "Please, check your internet connection", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }, true);
             return super.responseError();
         }
+
     }
 
 

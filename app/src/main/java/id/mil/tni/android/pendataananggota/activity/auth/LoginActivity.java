@@ -2,8 +2,11 @@ package id.mil.tni.android.pendataananggota.activity.auth;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +30,7 @@ import java.util.IllegalFormatCodePointException;
 
 import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
+import id.mil.tni.android.pendataananggota.helper.Helper;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.http.PALoginRequest;
 
@@ -89,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     dialog.show();
                     email = etUsername.getText().toString();
                     password = etPassword.getText().toString();
-                    new onLoginRequest(getApplicationContext(), getString(R.string.api_path_login), email, password).execute();
+                    new onLoginRequest(getApplicationContext(), getString(R.string.api_path_login), email+"@mabes.tni.mil", password).execute();
 
                     /*session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
                     session.setLoginSession(true);
@@ -124,30 +128,41 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public JSONObject responseObject() throws JSONException {
+
+            return super.responseObject();
+        }
+
+        @Override
+        public JSONObject responseSuccess() throws JSONException {
             if (dialog != null) dialog.dismiss();
             session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
             session.setLoginSession(true);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-            return super.responseObject();
-        }
-
-        @Override
-        public JSONObject responseSuccess() throws JSONException {
-            Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
             return super.responseSuccess();
         }
 
         @Override
         public JSONObject responseFailed() throws JSONException {
-            Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_SHORT).show();
+            if (dialog != null) dialog.dismiss();
+
+            Helper.handlePopupMessage(LoginActivity.this, getMsg(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }, true);
             return super.responseFailed();
         }
 
         @Override
         public String responseError() {
             if (dialog != null) dialog.dismiss();
+            Helper.handlePopupMessage(LoginActivity.this, "Please, check your internet connection", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }, true);
             return super.responseError();
         }
     }
