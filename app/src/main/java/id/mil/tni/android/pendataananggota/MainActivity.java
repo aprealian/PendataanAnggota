@@ -5,31 +5,42 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import id.mil.tni.android.pendataananggota.activity.auth.LoginActivity;
+import id.mil.tni.android.pendataananggota.data.Pendidikan;
 import id.mil.tni.android.pendataananggota.helper.Helper;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.http.PAUpdateRequest;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String TAG_YEAR = "year";
+    private static String TAG_LEVEL = "level";
+
     private SessionManager session;
     private ProgressDialog dialog;
+    private LinearLayout container;
     private LinearLayout btnSimpan;
     private TextView tvNama;
     private ImageView ivSignOut;
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setMessage("Please wait...");
 
+        container = (LinearLayout) findViewById(R.id.ll_container);
         ivSignOut = (ImageView) findViewById(R.id.iv_signout);
         btnSimpan = (LinearLayout) findViewById(R.id.lv_simpan);
         tvNama = (TextView) findViewById(R.id.tv_nama);
@@ -98,7 +110,16 @@ public class MainActivity extends AppCompatActivity {
         if (email != null && !email.equals("null") && !TextUtils.isEmpty(email)) etEmail.setText(email);
         if (noMobil != null && !noMobil.equals("null") && !TextUtils.isEmpty(noMobil)) etNomobil.setText(noMobil);
         if (noSim  != null && !noSim.equals("null") && !TextUtils.isEmpty(noSim)) etNosim.setText(noSim);
-        if (pengalaman  != null && !pengalaman.equals("null") && !TextUtils.isEmpty(pengalaman)) etPengalaman.setText(pengalaman);
+        if (pengalaman  != null && !pengalaman.equals("null") && !TextUtils.isEmpty(pengalaman)){
+            try {
+                JSONArray jsonArray = new JSONArray(pengalaman);
+                addPendidikan(jsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //etPengalaman.setText(pengalaman);
         if (keterampilan  != null && !keterampilan.equals("null") && !TextUtils.isEmpty(keterampilan)) etKeterampilan.setText(keterampilan);
     }
 
@@ -106,7 +127,38 @@ public class MainActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(etNomobil.getText().toString()) || TextUtils.isEmpty(etNosim.getText().toString()) || TextUtils.isEmpty(etPengalaman.getText().toString()) || TextUtils.isEmpty(etKeterampilan.getText().toString())){
+
+                JSONArray array = new JSONArray();
+                for (int i = 0; i < container.getChildCount(); i++) {
+                    LinearLayout view = (LinearLayout) container.getChildAt(i);
+
+                    EditText pendidikan = (EditText) view.getChildAt(0);
+                    EditText tahun = (EditText) view.getChildAt(1);
+
+                    if (!TextUtils.isEmpty(pendidikan.getText().toString()) && !TextUtils.isEmpty(tahun.getText().toString())){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put(TAG_YEAR, tahun.getText().toString());
+                            obj.put(TAG_LEVEL, pendidikan.getText().toString());
+                            array.put(obj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    /*for (int j = 0; j < view.getChildCount(); j++) {
+                        View myView = view.getChildAt(0);
+                        *//*View view = container.getChildAt(1);
+                        if (v instanceof TextView) {
+                            Toast.makeText(MainActivity.this, view.getClass().getName(), Toast.LENGTH_SHORT).show();
+                        }*//*
+                        // Do something with v.
+                        // …
+                        Toast.makeText(MainActivity.this, String.valueOf(container.getChildCount())+"-"+String.valueOf(view.getChildCount()), Toast.LENGTH_SHORT).show();
+                    }*/
+                }
+
+                if (TextUtils.isEmpty(etNomobil.getText().toString()) || TextUtils.isEmpty(etNosim.getText().toString()) || TextUtils.isEmpty(etKeterampilan.getText().toString())){
                     Toast.makeText(MainActivity.this, "Silahkan isi form yang masih kosong", Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(MainActivity.this, "Pendafatran berhasil disimpan", Toast.LENGTH_SHORT).show();
@@ -114,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
                     dialog.show();
                     noMobil = etNomobil.getText().toString();
                     noSim = etNosim.getText().toString();
-                    pengalaman = etPengalaman.getText().toString();
+                    //pengalaman = etPengalaman.getText().toString();
+                    pengalaman = array.toString();
                     keterampilan = etKeterampilan.getText().toString();
                     new onUpdateRequest(getApplicationContext(), getString(R.string.api_path_update_profile), noMobil, noSim, pengalaman, keterampilan).execute();
                 }
@@ -222,5 +275,106 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public  void addPendidikan(JSONArray jsonArray){
+        LayoutInflater linflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (jsonArray.length() > 0) {
+            //int pos = 0;
+            int pos = 0;
+            while (pos < jsonArray.length())
+            {
+                View myView = linflater.inflate(R.layout.view_pendidikan_informal, null); //here item is the the layout you want to inflate
+                myView.setId(pos);
+
+                Pendidikan item = null;
+
+                try {
+                    JSONObject obj = jsonArray.getJSONObject(pos);
+                    item = new Pendidikan(obj.getString(TAG_YEAR), obj.getString(TAG_LEVEL));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (item != null){
+                    // This stores a reference to the actual item in the view
+                    myView.setTag(item);
+
+                    //MARGIN LAYOUT
+                    //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    //layoutParams.setMargins(0, 0, 0, GKHelper.integerToDP(getApplicationContext(), 10));
+                    //myView.setLayoutParams(layoutParams);
+
+                    TextView tvPendidikan = (TextView) myView.findViewById(R.id.tv_pendidikan);
+                    TextView tvTahun = (TextView) myView.findViewById(R.id.tv_tahun);
+                    ImageView btnAdd = (ImageView) myView.findViewById(R.id.iv_add);
+                    ImageView btnRemove = (ImageView) myView.findViewById(R.id.iv_delete);
+
+                    btnAdd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+                    btnRemove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+                    tvPendidikan.setText(item.getLevel());
+                    tvTahun.setText(item.getYear());
+
+                    pos++;
+                    container.addView(myView);
+                }
+            }
+        } else {
+
+            createFormPendidikan(linflater);
+
+        }
+
+
+    }
+
+
+    private void createFormPendidikan(final LayoutInflater linflater){
+        final View myView = linflater.inflate(R.layout.view_pendidikan_informal, null); //here item is the the layout you want to inflate
+        myView.setId(0);
+
+        final TextView tvPendidikan = (TextView) myView.findViewById(R.id.tv_pendidikan);
+        TextView tvTahun = (TextView) myView.findViewById(R.id.tv_tahun);
+        final ImageView btnAdd = (ImageView) myView.findViewById(R.id.iv_add);
+        final ImageView btnRemove = (ImageView) myView.findViewById(R.id.iv_delete);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(tvPendidikan.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Kolom Pendidikan tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(tvPendidikan.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Kolom Tahun tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else {
+                    btnAdd.setVisibility(View.GONE);
+                    btnRemove.setVisibility(View.VISIBLE);
+                    createFormPendidikan(linflater);
+                }
+            }
+        });
+
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (container.getChildCount()>1){
+                    container.removeView(myView);
+                }
+
+            }
+        });
+
+        container.addView(myView);
+    }
 
 }

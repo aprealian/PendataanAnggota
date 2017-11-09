@@ -5,18 +5,15 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
-
 /**
  * Created by Aprilian Nur on 11/2/2017.
  */
 
-public class PARegisterRequest extends BasicRequest {
+public class PACekNrpRequest extends BasicRequest {
 
     private Context context;
 
-    public PARegisterRequest(Context context, String apiPath, String name, String nrp, String email, String password, String retypePassword, String matra, String tgllahir) {
+    public PACekNrpRequest(Context context, String apiPath, String nrp) {
         super(context, apiPath);
 
         this.context = context;
@@ -33,13 +30,7 @@ public class PARegisterRequest extends BasicRequest {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("name", name);
             json.put("nrp", nrp);
-            json.put("email", email);
-            json.put("password", password);
-            json.put("retypePassword", retypePassword);
-            json.put("uo", matra);
-            json.put("tgllahir", tgllahir);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -17,7 +17,7 @@ public class PAUpdateRequest extends BasicRequest {
 
     private Context context;
 
-    public PAUpdateRequest(Context context, String apiPath, String carNum, String simNum, String orgExp, String skills) {
+    public PAUpdateRequest(Context context, String apiPath, String carNum, String simNum, String education, String training) {
         super(context, apiPath);
 
         this.context = context;
@@ -36,8 +36,8 @@ public class PAUpdateRequest extends BasicRequest {
         try {
             json.put("car_num", carNum);
             json.put("sim_num", simNum);
-            json.put("org_exp", orgExp);
-            json.put("skills", skills);
+            json.put("education", education);
+            json.put("training", training);
         } catch (JSONException e) {
             e.printStackTrace();
         }

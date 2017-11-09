@@ -5,4 +5,5 @@
     <string name="api_path_register">/api/daftar</string>
     <string name="api_path_get_profile"></string>
     <string name="api_path_update_profile">/api/update_info</string>
+    <string name="api_path_cek_nrp">/api/check_nrp</string>
 </resources>

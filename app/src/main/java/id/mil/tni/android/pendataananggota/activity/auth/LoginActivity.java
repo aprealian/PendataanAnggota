@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
+import java.util.regex.Matcher;
 
 import id.mil.tni.android.pendataananggota.MainActivity;
 import id.mil.tni.android.pendataananggota.R;
@@ -42,14 +44,14 @@ public class LoginActivity extends AppCompatActivity {
     private static String TAG_NAME = "name";
     private static String TAG_CAR_NUM = "car_num";
     private static String TAG_SIM_NUM = "sim_num";
-    private static String TAG_ORG_EXP = "org_exp";
-    private static String TAG_SKILLS = "skills";
+    private static String TAG_EDUCATION = "education";
+    private static String TAG_SKILLS = "training";
     private static String TAG_TOKEN = "token";
 
     private SessionManager session;
     private ProgressDialog dialog;
     private LinearLayout btnLogin;
-    private EditText etUsername;
+    private EditText etEmail;
     private EditText etPassword;
 
     private String token;
@@ -87,31 +89,41 @@ public class LoginActivity extends AppCompatActivity {
         nrp = user.get(SessionManager.KEY_NRP);*/
 
 
-        etUsername = (EditText) findViewById(R.id.et_username);
+        etEmail = (EditText) findViewById(R.id.et_email);
         etPassword = (EditText) findViewById(R.id.et_password);
         btnLogin = (LinearLayout) findViewById(R.id.lv_login);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(etUsername.getText().toString())){
-                    Toast.makeText(LoginActivity.this, "Masukkan username", Toast.LENGTH_SHORT).show();
+
+                if (TextUtils.isEmpty(etEmail.getText().toString())){
+                    Toast.makeText(LoginActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (!Helper.isValidEmaillId(etEmail.getText().toString())){
+                    Toast.makeText(LoginActivity.this, "Email tidak valid", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(etPassword.getText().toString())){
-                    Toast.makeText(LoginActivity.this, "Masukkan password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } /*else if (!etUsername.getText().toString().equals(email) || !etPassword.getText().toString().equals(password)){
                     Toast.makeText(LoginActivity.this, "Username atau password salah", Toast.LENGTH_SHORT).show();
                 } */else {
 
                     dialog.show();
-                    email = etUsername.getText().toString();
+                    email = etEmail.getText().toString();
                     password = etPassword.getText().toString();
-                    new onLoginRequest(getApplicationContext(), getString(R.string.api_path_login), email+"@mabes.tni.mil", password).execute();
+                    new onLoginRequest(getApplicationContext(), getString(R.string.api_path_login), email, password).execute();
 
                     /*session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
                     session.setLoginSession(true);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();*/
+
+                    /*session.createLoginSessionToken("191919", "Aprilian Nur", "aprilian@gmail.com", "password", "NRP010101", "AE 22002 BE", "SIM-191919", "penaa ahahah ", "menggambar", true, "tokenku");
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();*/
+
                 }
             }
         });
@@ -156,7 +168,15 @@ public class LoginActivity extends AppCompatActivity {
                 name = userObj.getString(TAG_NAME);
                 noMobil = userObj.getString(TAG_CAR_NUM);
                 noSim = userObj.getString(TAG_SIM_NUM);
-                pengalaman = userObj.getString(TAG_ORG_EXP);
+                //pengalaman = userObj.getString(TAG_EDUCATION);
+                pengalaman = userObj.getJSONArray(TAG_EDUCATION).toString();
+
+                /*JSONArray jsonArray = userObj.getJSONArray(TAG_EDUCATION);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonArray.getJSONObject(i).getString("year");
+                    jsonArray.getJSONObject(i).getString("level");
+                }*/
+
                 keterampilan = userObj.getString(TAG_SKILLS);
                 token = userObj.getString(TAG_TOKEN);
 

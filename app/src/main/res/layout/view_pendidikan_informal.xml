@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <EditText
+        android:id="@+id/tv_pendidikan"
+        android:hint="Pendidikan"
+        android:layout_weight="5"
+        android:layout_width="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/tv_tahun"
+        android:hint="Tahun"
+        android:inputType="number"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_add"
+        android:src="@drawable/ic_plus"
+        android:layout_margin="@dimen/padding"
+        android:layout_gravity="center_vertical"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:visibility="gone"
+        android:src="@drawable/ic_delete"
+        android:layout_margin="@dimen/padding"
+        android:layout_gravity="center_vertical"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+
+</LinearLayout>

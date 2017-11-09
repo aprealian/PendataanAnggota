@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#99EC534E"
     tools:context="id.mil.tni.android.pendataananggota.activity.auth.LoginActivity">
 
@@ -56,171 +57,208 @@
                 android:layout_height="wrap_content" >
 
                 <LinearLayout
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:text="Nama"
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_nama"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@null"
-                        android:textSize="18sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <View
-                        android:background="@android:color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="NRP"
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:id="@+id/et_nrp"
-                        android:singleLine="true"
-                        android:maxLines="1"
-                        android:background="@null"
-                        android:textSize="18sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <View
-                        android:background="@android:color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
-
-                </LinearLayout>
-
-
-
-
-
-
-
-                <LinearLayout
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Email"
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/et_email"
+                            android:id="@+id/et_nrp"
+                            android:hint="@string/nrp"
                             android:singleLine="true"
                             android:maxLines="1"
                             android:textSize="18sp"
-                            android:background="@null"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:text="\u0040mabes.tni.mil"
-                            android:textSize="18sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
 
-                    </LinearLayout>
-
-                    <View
-                        android:background="@android:color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
+                    <TextView
+                        android:id="@+id/btn_cek_nrp"
+                        android:text="Cek NRP"
+                        android:padding="@dimen/padding_double"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/btn_reactangle_grey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/tv_ket_nrp"
+                    android:text="*Silahkan cek NRP, sebelum melanjutkan"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_nama"
+                        android:textAllCaps="true"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:hint="@string/nama"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </android.support.design.widget.TextInputLayout>
 
 
+                <TextView
+                    android:text="Tanggal Lahir (ex: 31/02/1995)"
+                    android:textColor="#644343"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginLeft="3dp"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
-                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_tgllahir_hari"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:hint="@string/tanggal"
+                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/et_tgllahir_bulan"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:hint="@string/bulan"
+                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/et_tgllahir_tahun"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:hint="@string/tahun"
+                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Password"
-                        android:layout_marginBottom="8dp"
+                        android:text="Matra"
+                        android:textColor="#644343"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="12sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
+                    <Spinner
+                        android:id="@+id/sp_matra"
+                        android:layout_marginLeft="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:hint="@string/email"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:inputType="textEmailAddress"
+                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    app:passwordToggleEnabled="true"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/et_password"
+                        android:hint="@string/password"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:background="@null"
                         android:textSize="18sp"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                    <View
-                        android:background="@android:color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
 
-                </LinearLayout>
+                </android.support.design.widget.TextInputLayout>
 
 
 
-                <LinearLayout
-                    android:layout_marginBottom="16dp"
-                    android:orientation="vertical"
+                <android.support.design.widget.TextInputLayout
+                    app:passwordToggleEnabled="true"
+                    android:layout_marginTop="@dimen/padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:text="Verifikasi Password"
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
                     <EditText
                         android:id="@+id/et_verif_password"
+                        android:hint="@string/verif_password"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:background="@null"
                         android:textSize="18sp"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                    <View
-                        android:background="@android:color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
 
-                </LinearLayout>
-
+                </android.support.design.widget.TextInputLayout>
 
 
 
@@ -235,7 +273,8 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="DAFTAR"
+                        android:textAllCaps="true"
+                        android:text="@string/daftar"
                         android:gravity="center"
                         android:padding="10dp"
                         android:textSize="18sp"

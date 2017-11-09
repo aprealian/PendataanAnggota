@@ -73,61 +73,69 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
-                    <LinearLayout
-                        android:layout_marginBottom="16dp"
-                        android:orientation="vertical"
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_marginTop="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="Nomor Mobil"
-                            android:layout_marginBottom="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
                         <EditText
                             android:id="@+id/et_nomobil"
+                            android:hint="Nomor Mobil (ex: B 2017 XYZ)"
                             android:singleLine="true"
                             android:maxLines="1"
-                            android:background="@null"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <View
-                            android:background="@android:color/black"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
 
-                    </LinearLayout>
+                    </android.support.design.widget.TextInputLayout>
 
 
-                    <LinearLayout
-                        android:layout_marginBottom="16dp"
-                        android:orientation="vertical"
+
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_marginTop="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="Nomor SIM"
-                            android:layout_marginBottom="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
                         <EditText
                             android:id="@+id/et_nosim"
+                            android:hint="Nomor SIM"
                             android:singleLine="true"
                             android:maxLines="1"
-                            android:background="@null"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <View
-                            android:background="@android:color/black"
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/et_email"
+                            android:hint="@string/email"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:inputType="textEmailAddress"
+                            android:textSize="18sp"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
+                            android:layout_height="wrap_content" />
 
-                    </LinearLayout>
-
+                    </android.support.design.widget.TextInputLayout>
 
 
 
@@ -135,74 +143,33 @@
 
 
                     <LinearLayout
-                        android:layout_marginBottom="16dp"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:text="Email"
-                            android:editable="false"
-                            android:layout_marginBottom="8dp"
+                            android:text="Pendidikan Informal"
+                            android:layout_marginLeft="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
                         <LinearLayout
-                            android:orientation="horizontal"
+                            android:id="@+id/ll_container"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"></LinearLayout>
 
-                            <EditText
-                                android:id="@+id/et_email"
-                                android:focusable="false"
-                                android:singleLine="true"
-                                android:maxLines="1"
-                                android:textSize="18sp"
-                                android:background="@null"
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:visibility="gone"
-                                android:text="\u0040mabes.tni.mil"
-                                android:textSize="18sp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:background="@android:color/black"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
-
-                    </LinearLayout>
-
-
-
-
-
-
-                    <LinearLayout
-                        android:layout_marginBottom="16dp"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="Pengalaman Organisasi"
-                            android:layout_marginBottom="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                        <!--<include layout="@layout/view_pendidikan_informal"/>-->
 
                         <EditText
                             android:id="@+id/et_pengalaman"
+                            android:visibility="gone"
                             android:background="@null"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
+                            android:visibility="gone"
                             android:background="@android:color/black"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"/>
@@ -211,30 +178,31 @@
 
 
 
-                    <LinearLayout
-                        android:layout_marginBottom="16dp"
-                        android:orientation="vertical"
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_marginTop="@dimen/padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:text="Keterampilan Khusus"
-                            android:layout_marginBottom="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
                         <EditText
                             android:id="@+id/et_keterampilan"
-                            android:background="@null"
+                            android:hint="Pelatihan/Seminar/Lokakarya"
+                            android:singleLine="true"
+                            android:maxLines="1"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <View
-                            android:background="@android:color/black"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"/>
 
-                    </LinearLayout>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:text="* jika lebih dari satu pisahkan menggunakan tanda koma(,)"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
 
 
