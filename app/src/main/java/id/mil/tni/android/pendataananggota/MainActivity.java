@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import id.mil.tni.android.pendataananggota.activity.auth.LoginActivity;
+import id.mil.tni.android.pendataananggota.activity.auth.RegisterActivity;
 import id.mil.tni.android.pendataananggota.data.Pendidikan;
 import id.mil.tni.android.pendataananggota.helper.Helper;
 import id.mil.tni.android.pendataananggota.helper.PALog;
@@ -159,17 +160,25 @@ public class MainActivity extends AppCompatActivity {
                     }*/
                 }
 
-                if (TextUtils.isEmpty(etNomobil.getText().toString()) || TextUtils.isEmpty(etNosim.getText().toString()) || TextUtils.isEmpty(etKeterampilan.getText().toString())){
-                    Toast.makeText(MainActivity.this, "Silahkan isi form yang masih kosong", Toast.LENGTH_SHORT).show();
+                pengalaman = pendidikanArrayList.toString();
+
+                if (TextUtils.isEmpty(etNomobil.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Nomor Mobil tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etNosim.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Nomor SIM tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etEmail.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(pengalaman)){
+                    Toast.makeText(MainActivity.this, "Pendidikan Informal tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etKeterampilan.getText().toString())){
+                    Toast.makeText(MainActivity.this, "Pelatihan tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(MainActivity.this, "Pendafatran berhasil disimpan", Toast.LENGTH_SHORT).show();
                     //session.createLoginSession(name, email, password, nrp, etNomobil.getText().toString(), etNosim.getText().toString(), etPengalaman.getText().toString(), etKeterampilan.getText().toString());
                     dialog.show();
                     noMobil = etNomobil.getText().toString();
                     noSim = etNosim.getText().toString();
-                    //pengalaman = etPengalaman.getText().toString();
                     pengalaman = pendidikanArrayList.toString();
-                    PALog.e("APA INI "+pengalaman);
                     keterampilan = etKeterampilan.getText().toString();
                     new onUpdateRequest(getApplicationContext(), getString(R.string.api_path_update_profile), noMobil, noSim, pendidikanArrayList, keterampilan).execute();
                 }
@@ -278,14 +287,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public  void addPendidikan(JSONArray jsonArray){
-        LayoutInflater linflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public  void addPendidikan(final JSONArray jsonArray){
+        final LayoutInflater linflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (jsonArray.length() > 0) {
             //int pos = 0;
             int pos = 0;
             while (pos < jsonArray.length())
             {
-                View myView = linflater.inflate(R.layout.view_pendidikan_informal, null); //here item is the the layout you want to inflate
+                final View myView = linflater.inflate(R.layout.view_pendidikan_informal, null); //here item is the the layout you want to inflate
                 myView.setId(pos);
 
                 Pendidikan item = null;
@@ -308,20 +317,36 @@ public class MainActivity extends AppCompatActivity {
 
                     TextView tvPendidikan = (TextView) myView.findViewById(R.id.tv_pendidikan);
                     TextView tvTahun = (TextView) myView.findViewById(R.id.tv_tahun);
-                    ImageView btnAdd = (ImageView) myView.findViewById(R.id.iv_add);
-                    ImageView btnRemove = (ImageView) myView.findViewById(R.id.iv_delete);
+                    final ImageView btnAdd = (ImageView) myView.findViewById(R.id.iv_add);
+                    final ImageView btnRemove = (ImageView) myView.findViewById(R.id.iv_delete);
+
+                    final int position = pos;
+
+                    if (pos!=jsonArray.length()-1){
+                        btnAdd.setVisibility(View.GONE);
+                        btnRemove.setVisibility(View.VISIBLE);
+                    } else {
+                        btnAdd.setVisibility(View.VISIBLE);
+                        btnRemove.setVisibility(View.GONE);
+                    }
 
                     btnAdd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            btnAdd.setVisibility(View.GONE);
+                            btnRemove.setVisibility(View.VISIBLE);
+                            createFormPendidikan(linflater);
                         }
                     });
 
                     btnRemove.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            /*container.removeAllViews();
+                            addPendidikan(removeArray(position));*/
+                            if (container.getChildCount()>1){
+                                container.removeView(myView);
+                            }
                         }
                     });
 
@@ -377,6 +402,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
         container.addView(myView);
+    }
+
+
+    private JSONArray removeArray (int position){
+        JSONArray list = new JSONArray();
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(pengalaman);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        int len = jsonArray.length();
+        if (jsonArray != null) {
+            for (int i=0;i<len;i++)
+            {
+                //Excluding the item at position
+                if (i != position)
+                {
+                    try {
+                        list.put(jsonArray.get(i));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            //Remove the element from arraylist
+            //list.remove(position);
+        }
+        return list;
     }
 
 }
