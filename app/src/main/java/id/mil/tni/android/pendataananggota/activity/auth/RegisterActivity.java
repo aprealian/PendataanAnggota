@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +13,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import id.mil.tni.android.pendataananggota.R;
@@ -32,13 +37,15 @@ import id.mil.tni.android.pendataananggota.helper.UserDetailStorage;
 import id.mil.tni.android.pendataananggota.http.PACekNrpRequest;
 import id.mil.tni.android.pendataananggota.http.PARegisterRequest;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, id.mil.tni.android.pendataananggota.view.DatePicker.IDatePickerListener {
 
     private SessionManager session;
     private MatraAdapter adapter;
     private ProgressDialog dialog;
     private LinearLayout btnDaftar;
-    private TextView btnCekNrp;
+    private TextView tvBtnDaftar;
+    private LinearLayout btnCekNrp;
+    private TextView tvCekNrp;
     private Spinner spMatra;
     private EditText etNama;
     private EditText etNrp;
@@ -46,10 +53,13 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etVerifPassword;
     private EditText etEmail;
+    private TextView tvTanggalLahir;
     private EditText etTglLahirHari;
     private EditText etTglLahirBulan;
     private EditText etTglLahirTahun;
     private String name, nrp, email, password, retypePassword, matra, tgllahir;
+    private DatePickerDialog datePickerDialog;
+    private id.mil.tni.android.pendataananggota.view.DatePicker datePickerListDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initData() {
         ArrayList<Matra> data = new ArrayList<Matra>();
-        data.add(new Matra("2", "Mabes TNI"));
+        data.add(new Matra(null, "Pilih Satuan"));
         data.add(new Matra("3", "Angkatan Darat"));
         data.add(new Matra("4", "Angkatan Laut"));
         data.add(new Matra("5", "Angkatan Udara"));
@@ -77,12 +87,22 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // get user data from session
-                if (TextUtils.isEmpty(etNrp.getText().toString()) || TextUtils.isEmpty(etNama.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString()) || TextUtils.isEmpty(etVerifPassword.getText().toString()) || TextUtils.isEmpty(etEmail.getText().toString()) || TextUtils.isEmpty(etTglLahirHari.getText().toString()) || TextUtils.isEmpty(etTglLahirBulan.getText().toString()) || TextUtils.isEmpty(etTglLahirTahun.getText().toString()) ){
-                    Toast.makeText(RegisterActivity.this, "Silahkan isi form yang masih kosong", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(etNrp.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "NRP tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etNama.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etTglLahirHari.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "Tanggal Lahir tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etEmail.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } else if (!Helper.isValidEmaillId(etEmail.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "Email tidak valid", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etPassword.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } else if (etPassword.getText().length() < 6 ){
                     Toast.makeText(RegisterActivity.this, "Panjang password minimal 6 karakter", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(etVerifPassword.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "Verifikasi Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } else if (!etPassword.getText().toString().equals(etVerifPassword.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "Verifikasi password salah", Toast.LENGTH_SHORT).show();
                 } else {
@@ -117,21 +137,45 @@ public class RegisterActivity extends AppCompatActivity {
         btnCekNrp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(etNrp.getText().toString())){
+                Matra m = (Matra) spMatra.getSelectedItem();
+                matra = m.getId();
+                nrp = etNrp.getText().toString();
+                if (TextUtils.isEmpty(matra)){
+                    Toast.makeText(RegisterActivity.this, "Silahkan pilih satuan kerja terlebih dahulu", Toast.LENGTH_LONG).show();
+                } else if (TextUtils.isEmpty(nrp)){
                     Toast.makeText(RegisterActivity.this, "NRP tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 } else {
                     dialog.show();
-                    nrp = etNrp.getText().toString();
-                    new onCekNRPRequest(getApplicationContext(), getString(R.string.api_path_cek_nrp), nrp).execute();
+                    new onCekNRPRequest(getApplicationContext(), getString(R.string.api_path_cek_nrp), nrp, matra).execute();
                 }
+            }
+        });
+
+        etTglLahirHari.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //datePickerDialog.show();
+                datePickerListDialog.show();
             }
         });
 
     }
 
     private void initView() {
+
+        Date date = new Date(); // your date
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(RegisterActivity.this, RegisterActivity.this, year-17, 8, 17);
+
         spMatra = (Spinner) findViewById(R.id.sp_matra);
         btnDaftar = (LinearLayout) findViewById(R.id.lv_daftar);
+        tvBtnDaftar = (TextView) findViewById(R.id.tv_btn_daftar);
+        tvTanggalLahir = (TextView) findViewById(R.id.tv_tgllahir_hari);
         etNrp = (EditText) findViewById(R.id.et_nrp);
         etNama = (EditText) findViewById(R.id.et_nama);
         etPassword = (EditText) findViewById(R.id.et_password);
@@ -140,7 +184,8 @@ public class RegisterActivity extends AppCompatActivity {
         etTglLahirHari = (EditText) findViewById(R.id.et_tgllahir_hari);
         etTglLahirBulan = (EditText) findViewById(R.id.et_tgllahir_bulan);
         etTglLahirTahun = (EditText) findViewById(R.id.et_tgllahir_tahun);
-        btnCekNrp = (TextView) findViewById(R.id.btn_cek_nrp);
+        btnCekNrp = (LinearLayout) findViewById(R.id.lv_cek_nrp);
+        tvCekNrp = (TextView) findViewById(R.id.tv_cek_nrp);
         tvKetNrp = (TextView) findViewById(R.id.tv_ket_nrp);
 
         dialog = new ProgressDialog(this);
@@ -151,7 +196,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void disableForm() {
-        spMatra.setEnabled(false);
+        spMatra.setEnabled(true);
+        etNrp.setEnabled(true);
+        btnCekNrp.setEnabled(true);
+
         etNama.setEnabled(false);
         etPassword.setEnabled(false);
         etVerifPassword.setEnabled(false);
@@ -160,10 +208,45 @@ public class RegisterActivity extends AppCompatActivity {
         etTglLahirBulan.setEnabled(false);
         etTglLahirTahun.setEnabled(false);
         btnDaftar.setEnabled(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            tvBtnDaftar.setTextColor(getResources().getColor(R.color.colorGrey1, getTheme()));
+        }else {
+            tvBtnDaftar.setTextColor(getResources().getColor(R.color.colorGrey1));
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //>= API 21
+            btnDaftar.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_grey, getApplicationContext().getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            btnDaftar.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_grey));
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            btnDaftar.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_reactangle_grey));
+        }
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            tvCekNrp.setTextColor(getResources().getColor(R.color.colorRed1, getTheme()));
+        }else {
+            tvCekNrp.setTextColor(getResources().getColor(R.color.colorRed1));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //>= API 21
+            btnCekNrp.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_white, getApplicationContext().getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            btnCekNrp.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_white));
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            btnCekNrp.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_reactangle_white));
+        }
+
     }
 
     private void enableForm() {
-        spMatra.setEnabled(true);
+        spMatra.setEnabled(false);
+        etNrp.setEnabled(false);
+        btnCekNrp.setEnabled(false);
+
         etNama.setEnabled(true);
         etPassword.setEnabled(true);
         etVerifPassword.setEnabled(true);
@@ -172,6 +255,37 @@ public class RegisterActivity extends AppCompatActivity {
         etTglLahirBulan.setEnabled(true);
         etTglLahirTahun.setEnabled(true);
         btnDaftar.setEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            tvBtnDaftar.setTextColor(getResources().getColor(R.color.colorRed1, getTheme()));
+        }else {
+            tvBtnDaftar.setTextColor(getResources().getColor(R.color.colorRed1));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //>= API 21
+            btnDaftar.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_white, getApplicationContext().getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            btnDaftar.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_white));
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            btnDaftar.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_reactangle_white));
+        }
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            tvCekNrp.setTextColor(getResources().getColor(R.color.colorGrey1, getTheme()));
+        }else {
+            tvCekNrp.setTextColor(getResources().getColor(R.color.colorGrey1));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { //>= API 21
+            btnCekNrp.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_grey, getApplicationContext().getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            btnCekNrp.setBackground(getResources().getDrawable(R.drawable.btn_reactangle_grey));
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            btnCekNrp.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_reactangle_grey));
+        }
+
     }
 
 
@@ -184,6 +298,33 @@ public class RegisterActivity extends AppCompatActivity {
         password = user.get(SessionManager.KEY_PASSWORD);
 
         UserDetailStorage userDetailStorage = new UserDetailStorage(RegisterActivity.this);
+
+        Date date = new Date(); // your date
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerListDialog = new id.mil.tni.android.pendataananggota.view.DatePicker(RegisterActivity.this, year-17, 8, 17);
+        datePickerListDialog.setDatePickerListener(RegisterActivity.this);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        tvTanggalLahir.setVisibility(View.VISIBLE);
+        etTglLahirHari.setText(String.valueOf(dayOfMonth+"/"+monthOfYear+"/"+year));
+    }
+
+    @Override
+    public void onClear() {
+
+    }
+
+    @Override
+    public void onOK(int year, int month, int day) {
+        tvTanggalLahir.setVisibility(View.VISIBLE);
+        etTglLahirHari.setText(String.valueOf(day)+"-"+String.valueOf(month)+"-"+String.valueOf(year));
     }
 
 
@@ -255,8 +396,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private class onCekNRPRequest extends PACekNrpRequest {
 
-        public onCekNRPRequest(Context context, String apiPath, String nrp) {
-            super(context, apiPath, nrp);
+        public onCekNRPRequest(Context context, String apiPath, String nrp, String uo) {
+            super(context, apiPath, nrp, uo);
         }
 
         @Override
@@ -279,16 +420,31 @@ public class RegisterActivity extends AppCompatActivity {
         public JSONObject responseSuccess() throws JSONException {
             if (dialog != null) dialog.dismiss();
             //session.createLoginSession(name, email, password, nrp, noMobil, noSim, pengalaman, keterampilan, true);
-            tvKetNrp.setText(getMsg());
+            //tvKetNrp.setText(getMsg());
             enableForm();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                btnCekNrp.setBackground(ContextCompat.getDrawable(RegisterActivity.this, R.drawable.btn_reactangle_grey));
+            }
+
+
+
+
+
+
+
             //Toast.makeText(RegisterActivity.this, getJson(), Toast.LENGTH_SHORT).show();
+            //etTglLahirHari.setText(obj.getString("tgllahir").substring(0,2));
+            //etTglLahirBulan.setText(obj.getString("tgllahir").substring(2,4));
+            //etTglLahirTahun.setText(obj.getString("tgllahir").substring(4,8));
+            //Toast.makeText(RegisterActivity.this, obj.toString(), Toast.LENGTH_SHORT).show();
+
             JSONObject objA = new JSONObject(getJson());
             JSONObject obj = objA.getJSONObject("data");
-            //Toast.makeText(RegisterActivity.this, obj.toString(), Toast.LENGTH_SHORT).show();
             etNama.setText(obj.getString("nama"));
-            etTglLahirHari.setText(obj.getString("tgllahir").substring(0,2));
-            etTglLahirBulan.setText(obj.getString("tgllahir").substring(2,4));
-            etTglLahirTahun.setText(obj.getString("tgllahir").substring(4,8));
+
+            enableForm();
+
             return super.responseSuccess();
         }
 
@@ -298,7 +454,7 @@ public class RegisterActivity extends AppCompatActivity {
             Helper.handlePopupMessage(RegisterActivity.this, getMsg(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    tvKetNrp.setText(getMsg());
+                    //tvKetNrp.setText(getMsg());
                     disableForm();
                 }
             }, true);

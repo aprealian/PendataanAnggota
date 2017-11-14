@@ -30,6 +30,7 @@ import java.util.HashMap;
 import id.mil.tni.android.pendataananggota.activity.auth.LoginActivity;
 import id.mil.tni.android.pendataananggota.data.Pendidikan;
 import id.mil.tni.android.pendataananggota.helper.Helper;
+import id.mil.tni.android.pendataananggota.helper.PALog;
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import id.mil.tni.android.pendataananggota.http.PAUpdateRequest;
 
@@ -128,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                JSONArray array = new JSONArray();
+                //JSONArray array = new JSONArray();
+                ArrayList<String> pendidikanArrayList = new ArrayList<String>();
                 for (int i = 0; i < container.getChildCount(); i++) {
                     LinearLayout view = (LinearLayout) container.getChildAt(i);
 
@@ -136,14 +138,13 @@ public class MainActivity extends AppCompatActivity {
                     EditText tahun = (EditText) view.getChildAt(1);
 
                     if (!TextUtils.isEmpty(pendidikan.getText().toString()) && !TextUtils.isEmpty(tahun.getText().toString())){
-                        JSONObject obj = new JSONObject();
-                        try {
-                            obj.put(TAG_YEAR, tahun.getText().toString());
-                            obj.put(TAG_LEVEL, pendidikan.getText().toString());
-                            array.put(obj);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        //JSONObject obj = new JSONObject();
+                        Pendidikan pendidikanOb = null;
+                        //obj.put(TAG_YEAR, tahun.getText().toString());
+                        //obj.put(TAG_LEVEL, pendidikan.getText().toString());
+                        //array.put(obj);
+                        pendidikanOb = new Pendidikan(tahun.getText().toString(), pendidikan.getText().toString());
+                        pendidikanArrayList.add(pendidikanOb.toString());
                     }
 
                     /*for (int j = 0; j < view.getChildCount(); j++) {
@@ -167,9 +168,10 @@ public class MainActivity extends AppCompatActivity {
                     noMobil = etNomobil.getText().toString();
                     noSim = etNosim.getText().toString();
                     //pengalaman = etPengalaman.getText().toString();
-                    pengalaman = array.toString();
+                    pengalaman = pendidikanArrayList.toString();
+                    PALog.e("APA INI "+pengalaman);
                     keterampilan = etKeterampilan.getText().toString();
-                    new onUpdateRequest(getApplicationContext(), getString(R.string.api_path_update_profile), noMobil, noSim, pengalaman, keterampilan).execute();
+                    new onUpdateRequest(getApplicationContext(), getString(R.string.api_path_update_profile), noMobil, noSim, pendidikanArrayList, keterampilan).execute();
                 }
             }
         });
@@ -210,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
 
     private class onUpdateRequest extends PAUpdateRequest {
 
-        public onUpdateRequest(Context context, String apiPath, String carNum, String simNum, String orgExp, String skills) {
-            super(context, apiPath, carNum, simNum, orgExp, skills);
+        public onUpdateRequest(Context context, String apiPath, String carNum, String simNum, ArrayList<String> pendidikanArrayList, String skills) {
+            super(context, apiPath, carNum, simNum, pendidikanArrayList, skills);
         }
 
         @Override

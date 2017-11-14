@@ -13,7 +13,7 @@ public class PACekNrpRequest extends BasicRequest {
 
     private Context context;
 
-    public PACekNrpRequest(Context context, String apiPath, String nrp) {
+    public PACekNrpRequest(Context context, String apiPath, String nrp, String uo) {
         super(context, apiPath);
 
         this.context = context;
@@ -31,6 +31,7 @@ public class PACekNrpRequest extends BasicRequest {
         JSONObject json = new JSONObject();
         try {
             json.put("nrp", nrp);
+            json.put("uo", uo);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -57,6 +57,28 @@
                 android:layout_height="wrap_content" >
 
                 <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Satker"
+                        android:textColor="#644343"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Spinner
+                        android:id="@+id/sp_matra"
+                        android:layout_marginLeft="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -78,26 +100,58 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/btn_cek_nrp"
-                        android:text="Cek NRP"
-                        android:padding="@dimen/padding_double"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/btn_reactangle_grey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_ket_nrp"
-                    android:text="*Silahkan cek NRP, sebelum melanjutkan"
+                    android:text="*Silahkan cek ketersediaan akun sebelum melanjutkan"
                     android:layout_marginLeft="4dp"
                     android:textSize="12sp"
                     android:layout_marginBottom="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:id="@+id/lv_cek_nrp"
+                    android:background="@drawable/btn_reactangle_white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="40dp"
+                    android:gravity="bottom"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_cek_nrp"
+                        android:textAllCaps="true"
+                        android:text="@string/cek_account"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorRed1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <!--<TextView
+                    android:id="@+id/btn_cek_nrp"
+                    android:text="Cek Account"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="@color/colorGrey1"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="right"
+                    android:textAlignment="center"
+                    android:background="@drawable/btn_reactangle_grey"
+                    android:layout_marginTop="@dimen/padding"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />-->
+
+
 
 
                 <android.support.design.widget.TextInputLayout
@@ -118,9 +172,34 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <LinearLayout
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Jabatan"
+                        android:textColor="#644343"
+                        android:layout_marginTop="@dimen/padding"
+                        android:layout_marginLeft="3dp"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Spinner
+                        android:id="@+id/sp_jabatan"
+                        android:layout_marginLeft="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
 
                 <TextView
-                    android:text="Tanggal Lahir (ex: 31/02/1995)"
+                    android:id="@+id/tv_tgllahir_hari"
+                    android:text="Tanggal Lahir"
+                    android:visibility="invisible"
                     android:textColor="#644343"
                     android:layout_marginTop="@dimen/padding"
                     android:layout_marginLeft="3dp"
@@ -136,21 +215,23 @@
                     <EditText
                         android:id="@+id/et_tgllahir_hari"
                         android:inputType="number"
-                        android:maxLength="2"
                         android:singleLine="true"
                         android:maxLines="1"
+                        android:focusable="false"
                         android:hint="@string/tanggal"
                         android:textSize="18sp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                     <TextView
                         android:text="/"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <EditText
                         android:id="@+id/et_tgllahir_bulan"
+                        android:visibility="gone"
                         android:inputType="number"
                         android:maxLength="2"
                         android:singleLine="true"
@@ -162,11 +243,13 @@
 
                     <TextView
                         android:text="/"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <EditText
                         android:id="@+id/et_tgllahir_tahun"
+                        android:visibility="gone"
                         android:inputType="number"
                         android:maxLength="4"
                         android:singleLine="true"
@@ -175,28 +258,6 @@
                         android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Matra"
-                        android:textColor="#644343"
-                        android:layout_marginTop="@dimen/padding"
-                        android:layout_marginLeft="3dp"
-                        android:textSize="12sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Spinner
-                        android:id="@+id/sp_matra"
-                        android:layout_marginLeft="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
@@ -273,12 +334,13 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/tv_btn_daftar"
                         android:textAllCaps="true"
                         android:text="@string/daftar"
                         android:gravity="center"
                         android:padding="10dp"
                         android:textSize="18sp"
-                        android:textColor="#FF6464"
+                        android:textColor="@color/colorRed1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 

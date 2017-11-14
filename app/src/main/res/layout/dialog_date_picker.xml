@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:background="@drawable/btn_reactangle_white">
+
+    <DatePicker
+        android:id="@+id/datePickerContainer"
+        android:visibility="gone"
+        android:calendarViewShown="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </DatePicker>
+
+
+    <include layout="@layout/view_datetime_picker"/>
+    <include layout="@layout/buttons"/>
+
+</LinearLayout>

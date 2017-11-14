@@ -5,6 +5,8 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import id.mil.tni.android.pendataananggota.helper.SessionManager;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -17,7 +19,7 @@ public class PAUpdateRequest extends BasicRequest {
 
     private Context context;
 
-    public PAUpdateRequest(Context context, String apiPath, String carNum, String simNum, String education, String training) {
+    public PAUpdateRequest(Context context, String apiPath, String carNum, String simNum, ArrayList<String> pendidikanArrayList, String training) {
         super(context, apiPath);
 
         this.context = context;
@@ -36,7 +38,7 @@ public class PAUpdateRequest extends BasicRequest {
         try {
             json.put("car_num", carNum);
             json.put("sim_num", simNum);
-            json.put("education", education);
+            json.put("education", pendidikanArrayList);
             json.put("training", training);
         } catch (JSONException e) {
             e.printStackTrace();
